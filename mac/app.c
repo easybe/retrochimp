@@ -1,0 +1,88 @@
+#include <Dialogs.h>
+#include <MacWindows.h>
+
+#include "form.h"
+#include "menu.h"
+#include "serial.h"
+
+void update(WindowRef w)
+{
+    SetPort(w);
+    BeginUpdate(w);
+
+    EndUpdate(w);
+}
+
+int main()
+{
+    println("Hello");
+
+    EventRecord event;
+    WindowRef win = NULL;
+    short item;
+    DialogRef form = NULL;
+
+#if !TARGET_API_MAC_CARBON
+    InitGraf(&qd.thePort);
+    InitFonts();
+    InitWindows();
+    InitMenus();
+    TEInit();
+    InitDialogs(NULL);
+#endif
+    InitCursor();
+    SetMenuBar(GetNewMBar(128));
+    DrawMenuBar();
+    enableMenuItems();
+
+    form = showForm();
+
+    for (;;) {
+        SystemTask();
+
+        if (GetNextEvent(everyEvent, &event) == false) {
+            continue;
+        }
+
+        if (IsDialogEvent(&event)) {
+            DialogRef dialog;
+            DialogSelect(&event, &dialog, &item);
+            if (dialog == form) {
+                handleFormEvent(dialog, item);
+            }
+        }
+
+        switch (event.what) {
+            case keyDown:
+                if (event.modifiers & cmdKey) {
+                    handleMenuCommand(MenuKey(event.message & charCodeMask));
+                }
+                break;
+            case mouseDown:
+                switch (FindWindow(event.where, &win)) {
+                    case inGoAway:
+                        if (TrackGoAway(win, event.where)) {
+                            DisposeWindow(win);
+                        }
+                        break;
+                    case inDrag:
+                        DragWindow(win, event.where, &qd.screenBits.bounds);
+                        break;
+                    case inMenuBar:
+                        handleMenuCommand(MenuSelect(event.where));
+                        break;
+                    case inContent:
+                        SelectWindow(win);
+                        break;
+                    case inSysWindow:
+                        SystemClick(&event, win);
+                        break;
+                }
+                break;
+            case updateEvt:
+                update((WindowRef)event.message);
+                break;
+        }
+    }
+    return 0;
+}

@@ -24,7 +24,7 @@ pascal void drawButtonFrame(DialogRef dlg, DialogItemIndex itemNo)
     Handle itemH;
     Rect box;
 
-    GetDialogItem(dlg, 1, &type, &itemH, &box);
+    GetDialogItem(dlg, kButton, &type, &itemH, &box);
     InsetRect(&box, -4, -4);
     PenSize(3, 3);
     FrameRoundRect(&box, 16, 16);
@@ -74,7 +74,7 @@ void sendFormData(DialogRef form)
 
 void handleFormEvent(DialogRef form, short item)
 {
-    if (item == 1) {
+    if (item == kButton) {
         sendFormData(form);
         DisposeDialog(form);
     }

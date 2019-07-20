@@ -19,7 +19,6 @@ int main()
 
     EventRecord event;
     WindowRef win = NULL;
-    short item;
     DialogRef form = NULL;
 
 #if !TARGET_API_MAC_CARBON
@@ -42,12 +41,11 @@ int main()
 
         SystemTask();
 
-        if (GetNextEvent(everyEvent, &event) == false) {
-            continue;
-        }
+        GetNextEvent(everyEvent, &event);
 
         if (IsDialogEvent(&event)) {
             DialogRef dialog;
+            short item;
             DialogSelect(&event, &dialog, &item);
             if (dialog == form) {
                 if (handleFormEvent(dialog, item)) {

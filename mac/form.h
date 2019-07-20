@@ -2,8 +2,9 @@
 #define _FORM_H_
 
 #include <Dialogs.h>
+#include <stdbool.h>
 
 DialogRef showForm();
-void handleFormEvent(DialogRef form, short item);
+bool handleFormEvent(DialogRef form, short item);
 
 #endif

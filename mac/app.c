@@ -35,9 +35,11 @@ int main()
     DrawMenuBar();
     enableMenuItems();
 
-    form = showForm();
-
     for (;;) {
+        if (form == NULL) {
+            form = showForm();
+        }
+
         SystemTask();
 
         if (GetNextEvent(everyEvent, &event) == false) {
@@ -48,7 +50,10 @@ int main()
             DialogRef dialog;
             DialogSelect(&event, &dialog, &item);
             if (dialog == form) {
-                handleFormEvent(dialog, item);
+                if (handleFormEvent(dialog, item)) {
+                    DisposeWindow(form);
+                    form = NULL;
+                }
             }
         }
 
@@ -63,6 +68,9 @@ int main()
                     case inGoAway:
                         if (TrackGoAway(win, event.where)) {
                             DisposeWindow(win);
+                            if (win == form) {
+                                form = NULL;
+                            }
                         }
                         break;
                     case inDrag:

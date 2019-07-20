@@ -72,10 +72,11 @@ void sendFormData(DialogRef form)
     println(json);
 }
 
-void handleFormEvent(DialogRef form, short item)
+bool handleFormEvent(DialogRef form, short item)
 {
     if (item == kButton) {
         sendFormData(form);
-        DisposeDialog(form);
+        return true;
     }
+    return false;
 }

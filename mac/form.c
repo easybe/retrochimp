@@ -5,8 +5,9 @@
 #include "form.h"
 #include "serial.h"
 
-enum {
-    kButton = 1,
+typedef enum {
+    kNone = 0,
+    kButton,
     kButtonBorder,
     kLabelFirst,
     kFieldFirst,
@@ -16,7 +17,7 @@ enum {
     kFieldEmail,
     kLabelEamil2,
     kFieldEmail2
-};
+} ItemId;
 
 pascal void drawButtonFrame(DialogRef dlg, DialogItemIndex itemNo)
 {
@@ -30,10 +31,14 @@ pascal void drawButtonFrame(DialogRef dlg, DialogItemIndex itemNo)
     FrameRoundRect(&box, 16, 16);
 }
 
+void selectItem(DialogRef form, ItemId item) {
+    SelectDialogItemText(form, item, 0, 32767);
+}
+
 DialogRef showForm()
 {
     DialogRef form = GetNewDialog(128, 0, (WindowPtr)-1);
-    SelectDialogItemText(form, kFieldFirst, 0, 32767);
+    selectItem(form, kFieldFirst);
     Rect box;
     Handle itemHandle;
     DialogItemType type;
@@ -72,11 +77,40 @@ void sendFormData(DialogRef form)
     println(json);
 }
 
+ItemId validateForm(DialogRef form)
+{
+    char val[255];
+    getFieldVal(form, kFieldFirst, val);
+    if (strcmp(val, "") == 0) {
+        return kFieldFirst;
+    }
+    getFieldVal(form, kFieldLast, val);
+    if (strcmp(val, "") == 0) {
+        return kFieldLast;
+    }
+    getFieldVal(form, kFieldEmail, val);
+    if (strcmp(val, "") == 0) {
+        return kFieldEmail;
+    }
+    getFieldVal(form, kFieldEmail2, val);
+    if (strcmp(val, "") == 0) {
+        return kFieldEmail2;
+    }
+    return kNone;
+}
+
 bool handleFormEvent(DialogRef form, short item)
 {
-    if (item == kButton) {
+    if (item != kButton) {
+        return false;
+    }
+
+    ItemId emptyItem = validateForm(form);
+    if (emptyItem == kNone) {
         sendFormData(form);
         return true;
+    } else {
+        selectItem(form, emptyItem);
     }
     return false;
 }

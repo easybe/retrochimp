@@ -26,8 +26,8 @@
 #define FIELD_E2_Y LABEL_E2_Y
 #define FIELD_E2_W FIELD_E_W
 
-#define WINDOW_X 100
-#define WINDOW_Y 50
+#define WINDOW_X 46
+#define WINDOW_Y 86
 #define WINDOW_W (LABEL_X + LABEL_W + FIELD_W + LABEL_X)
 #define WINDOW_H (3 * LABEL_H + 3 * SPACE_V + 70)
 

@@ -1,4 +1,5 @@
 #include "Menus.r"
+#include "Windows.r"
 
 resource 'MENU' (128) {
     128, textMenuProc;
@@ -36,6 +37,17 @@ resource 'MBAR' (128) {
     { 128, 129, 130 };
 };
 
+// About
+
 data 'ABUT' (128) {
-    "Retrochimp"
+    "Retrochimp\r\r"
+    "A Mailchimp signup form application that runs on a vintage Macintosh."
+};
+
+resource 'WIND' (128) {
+    {0, 0, 220, 320}, altDBoxProc;
+    invisible;
+    noGoAway;
+    0, "";
+    noAutoCenter;
 };

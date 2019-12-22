@@ -26,6 +26,9 @@ Config::loadDefaults()
     strcpy(name, "retrochimp");
     strcpy(ssid, WIFI_SSID);
     strcpy(pw, WIFI_PW);
+    strcpy(mcURL, MC_URL);
+    strcpy(mcUser, MC_USER);
+    strcpy(mcKey, MC_KEY);
     dirty_ = true;
 }
 

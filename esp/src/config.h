@@ -7,6 +7,9 @@ struct Config_ {
     char name[32];
     char ssid[32];
     char pw[32];
+    char mcURL[128];
+    char mcUser[32];
+    char mcKey[128];
 };
 
 class Config : public synergy::Storage<Config_> {

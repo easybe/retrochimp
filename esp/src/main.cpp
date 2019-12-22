@@ -4,6 +4,8 @@
 #include <Timeout.h>
 
 #include "config.h"
+#include "input.h"
+#include "mailchimp.h"
 #include "webif.h"
 #include "wifi.h"
 
@@ -25,5 +27,11 @@ void loop()
 
     if (configTimeout.check()) {
         config.save();
+    }
+    String userInfo = input::getUserInfo();
+    if (userInfo) {
+        if (!mailchimp::signUp(userInfo)) {
+            Serial.println("Failed to signup user");
+        }
     }
 }

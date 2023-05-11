@@ -29,7 +29,8 @@ void loop()
         config.save();
     }
     String userInfo = input::getUserInfo();
-    if (userInfo) {
+    if (userInfo.length()) {
+        Serial.println(userInfo);
         if (!mailchimp::signUp(userInfo)) {
             Serial.println("Failed to signup user");
         }
